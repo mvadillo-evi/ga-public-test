@@ -1,0 +1,23 @@
+name: Push to repo
+
+on:
+  workflow_call:
+    inputs:
+      image-tag:
+        required: true
+        description: 'Image tag'
+      runs-on:
+        required: false
+        type: string
+        default: "['ubuntu-latest']"
+
+
+
+jobs:
+  push-repo:
+    name: Push Repo
+    runs-on: ${{ fromJSON(inputs.runs-on }}
+    steps:
+      - name: Print Image Tag
+        run: |
+          echo '"Created" image ${{ inputs.image_tag }}'

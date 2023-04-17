@@ -1,0 +1,46 @@
+name: Env Tests
+
+on:
+  push:
+    branches:
+      - main
+      - /^release_.*/
+  pull_request:
+
+
+env:
+
+  TAG_OFFSET: 11779
+  BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
+
+jobs:
+  
+  construct-tag-name:
+    name: Construct name
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Name
+        id: name
+        run: |
+          tag_number=$((${{ env.TAG_OFFSET }} + ${{ github.run_number }}))
+          echo "image_tag=${{ env.BRANCH_NAME }}-${tag_number}" >> $GITHUB_OUTPUT
+            
+    outputs:
+      image_tag: ${{ steps.image-name.outputs.image_tag }}
+
+
+  push-to-repo:
+    name: Push to repo
+    needs: construct-tag-name
+    uses: ./.github/workflows/push-to-repo.yml
+    with:
+      image-tag: ${{ needs.construct-tag-name.outputs.image_tag }}
+
+  deploy:
+    name: Deploy
+    needs: [construct-tag-name, push-to-repo]
+    uses: ./.github/workflows/deploy.yml
+    with:
+      image-tag: ${{ needs.construct-docker-tag-name.outputs.image_tag }}-beta
+      environment: beta

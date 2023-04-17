@@ -1,0 +1,27 @@
+name: Deploy
+
+on:
+  workflow_call:
+    inputs:
+      environment:
+        description: 'Github environment, works for Manual approvals.'
+        required: true
+        type: string
+      image-tag:
+        required: true
+        description: 'Image tag'
+      runs-on:
+        required: false
+        type: string
+        default: "['ubuntu-latest']"
+
+
+
+jobs:
+  deploy:
+    name: Deploy
+    runs-on: ${{ fromJSON(inputs.runs-on }}
+    steps:
+      - name: Deploy
+        run: |
+          echo 'Deployed ${{ inputs.image_tag }} in ${{ inputs.environment }}'
