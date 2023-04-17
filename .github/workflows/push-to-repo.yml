@@ -19,5 +19,6 @@ jobs:
     runs-on: ${{ fromJSON(inputs.runs-on }}
     steps:
       - name: Print Image Tag
+        shell: bash
         run: |
           echo '"Created" image ${{ inputs.image_tag }}'
