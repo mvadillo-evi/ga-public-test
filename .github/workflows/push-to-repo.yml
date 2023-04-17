@@ -16,7 +16,7 @@ on:
 jobs:
   push-repo:
     name: Push Repo
-    runs-on: ${{ fromJSON(inputs.runs-on }}
+    runs-on: ${{ fromJSON(inputs.runs-on) }}
     steps:
       - name: Print Image Tag
         shell: bash
