@@ -10,6 +10,7 @@ on:
       image-tag:
         required: true
         description: 'Image tag'
+        type: string
       runs-on:
         required: false
         type: string
