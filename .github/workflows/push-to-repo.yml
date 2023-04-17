@@ -22,4 +22,4 @@ jobs:
       - name: Print Image Tag
         shell: bash
         run: |
-          echo '"Created" image ${{ inputs.image_tag }}'
+          echo '"Created" image ${{ inputs.image-tag }}'

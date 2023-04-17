@@ -25,4 +25,4 @@ jobs:
     steps:
       - name: Deploy
         run: |
-          echo 'Deployed ${{ inputs.image_tag }} in ${{ inputs.environment }}'
+          echo 'Deployed ${{ inputs.image-tag }} in ${{ inputs.environment }}'
