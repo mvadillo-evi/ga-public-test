@@ -27,7 +27,7 @@ jobs:
           echo "image_tag=${{ env.BRANCH_NAME }}-${tag_number}" >> $GITHUB_OUTPUT
             
     outputs:
-      image_tag: ${{ steps.image-name.outputs.image_tag }}
+      image_tag: ${{ steps.name.outputs.image_tag }}
 
 
   push-to-repo:
