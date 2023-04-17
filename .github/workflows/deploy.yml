@@ -22,6 +22,7 @@ jobs:
   deploy:
     name: Deploy
     runs-on: ${{ fromJSON(inputs.runs-on) }}
+    environment: ${{ inputs.environment }}
     steps:
       - name: Deploy
         run: |
