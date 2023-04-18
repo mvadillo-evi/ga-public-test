@@ -72,7 +72,7 @@ jobs:
       environment: dev
 
   deploy-back-dev-main:
-    name: Deploy Back Dev
+    name: Deploy Back Dev main
     if: inputs.BRANCH_NAME == 'main'
     needs: [construct-tag-name, push-to-repo]
     uses: ./.github/workflows/deploy.yml
@@ -80,7 +80,7 @@ jobs:
       image-tag: "${{ needs.construct-tag-name.outputs.image_tag }}-back-dev"
 
   deploy-side-dev-main:
-    name: Deploy Side Dev
+    name: Deploy Side Dev main
     if: inputs.BRANCH_NAME == 'main'
     needs: [construct-tag-name, push-to-repo]
     uses: ./.github/workflows/deploy.yml
