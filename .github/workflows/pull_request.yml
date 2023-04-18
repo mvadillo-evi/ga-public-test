@@ -52,3 +52,85 @@ jobs:
     with:
       image-tag: "${{ needs.construct-tag-name.outputs.image_tag }}-side-beta"
       environment: beta
+
+  deploy-back-dev:
+    name: Deploy Back Dev
+    if: inputs.BRANCH_NAME != 'main'
+    needs: [construct-tag-name, push-to-repo]
+    uses: ./.github/workflows/deploy.yml
+    with:
+      image-tag: "${{ needs.construct-tag-name.outputs.image_tag }}-back-dev"
+      environment: dev
+
+  deploy-side-dev:
+    name: Deploy Side Dev
+    if: inputs.BRANCH_NAME != 'main'
+    needs: [construct-tag-name, push-to-repo]
+    uses: ./.github/workflows/deploy.yml
+    with:
+      image-tag: "${{ needs.construct-tag-name.outputs.image_tag }}-side-dev"
+      environment: beta
+
+  deploy-back-dev-main:
+    name: Deploy Back Dev
+    if: inputs.BRANCH_NAME == 'main'
+    needs: [construct-tag-name, push-to-repo]
+    uses: ./.github/workflows/deploy.yml
+    with:
+      image-tag: "${{ needs.construct-tag-name.outputs.image_tag }}-back-dev"
+
+  deploy-side-dev-main:
+    name: Deploy Side Dev
+    if: inputs.BRANCH_NAME == 'main'
+    needs: [construct-tag-name, push-to-repo]
+    uses: ./.github/workflows/deploy.yml
+    with:
+      image-tag: "${{ needs.construct-tag-name.outputs.image_tag }}-side-dev"
+
+  deploy-back-stage:
+    name: Deploy Back Stage
+    needs: [construct-tag-name, push-to-repo]
+    uses: ./.github/workflows/deploy.yml
+    with:
+      image-tag: "${{ needs.construct-tag-name.outputs.image_tag }}-back-stage"
+      environment: stage
+
+  deploy-side-stage:
+    name: Deploy Side Stage
+    needs: [construct-tag-name, push-to-repo]
+    uses: ./.github/workflows/deploy.yml
+    with:
+      image-tag: "${{ needs.construct-tag-name.outputs.image_tag }}-side-stage"
+      environment: stage
+
+  deploy-back-qa:
+    name: Deploy Back QA
+    needs: [construct-tag-name, push-to-repo]
+    uses: ./.github/workflows/deploy.yml
+    with:
+      image-tag: "${{ needs.construct-tag-name.outputs.image_tag }}-back-qa"
+      environment: qa
+
+  deploy-side-qa:
+    name: Deploy Side QA
+    needs: [construct-tag-name, push-to-repo]
+    uses: ./.github/workflows/deploy.yml
+    with:
+      image-tag: "${{ needs.construct-tag-name.outputs.image_tag }}-side-qa"
+      environment: qa
+
+  deploy-back-prod:
+    name: Deploy Back Prod
+    needs: [construct-tag-name, push-to-repo]
+    uses: ./.github/workflows/deploy.yml
+    with:
+      image-tag: "${{ needs.construct-tag-name.outputs.image_tag }}-back-prod"
+      environment: prod
+
+  deploy-side-prod:
+    name: Deploy Side Prod
+    needs: [construct-tag-name, push-to-repo]
+    uses: ./.github/workflows/deploy.yml
+    with:
+      image-tag: "${{ needs.construct-tag-name.outputs.image_tag }}-side-prod"
+      environment: prod
