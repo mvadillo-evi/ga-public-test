@@ -69,7 +69,7 @@ jobs:
     uses: ./.github/workflows/deploy.yml
     with:
       image-tag: "${{ needs.construct-tag-name.outputs.image_tag }}-side-dev"
-      environment: beta
+      environment: dev
 
   deploy-back-dev-main:
     name: Deploy Back Dev
