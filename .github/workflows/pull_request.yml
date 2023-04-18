@@ -37,10 +37,18 @@ jobs:
     with:
       image-tag: ${{ needs.construct-tag-name.outputs.image_tag }}
 
-  deploy:
-    name: Deploy
+  deploy-back-beta:
+    name: Deploy Back Beta
     needs: [construct-tag-name, push-to-repo]
     uses: ./.github/workflows/deploy.yml
     with:
-      image-tag: "${{ needs.construct-tag-name.outputs.image_tag }}-beta"
+      image-tag: "${{ needs.construct-tag-name.outputs.image_tag }}-back-beta"
+      environment: beta
+
+  deploy-side-beta:
+    name: Deploy Side Beta
+    needs: [construct-tag-name, push-to-repo]
+    uses: ./.github/workflows/deploy.yml
+    with:
+      image-tag: "${{ needs.construct-tag-name.outputs.image_tag }}-side-beta"
       environment: beta
