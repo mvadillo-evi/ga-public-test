@@ -25,6 +25,8 @@ jobs:
     runs-on: ${{ fromJSON(inputs.runs-on) }}
     environment: ${{ inputs.environment }}
     steps:
+      - name: Checkout
+        uses: actions/checkout@v3
       - name: Deploy
         run: |
           echo 'Deployed ${{ inputs.image-tag }} in ${{ inputs.environment }}'
