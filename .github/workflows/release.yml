@@ -78,7 +78,6 @@ jobs:
 
   deploy-side-dev:
     name: Deploy Side Dev
-    if: ${{ env.BRANCH_NAME != "main" }}
     needs: [construct-tag-name, push-to-repo, construct-dev-environment]
     uses: ./.github/workflows/deploy.yml
     with:
