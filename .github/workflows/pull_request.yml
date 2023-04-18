@@ -1,10 +1,6 @@
-name: Env Tests
+name: Deploy None Prod
 
 on:
-  push:
-    branches:
-      - main
-      - /^release_.*/
   pull_request:
 
 
@@ -37,22 +33,6 @@ jobs:
     with:
       image-tag: ${{ needs.construct-tag-name.outputs.image_tag }}
 
-  deploy-back-beta:
-    name: Deploy Back Beta
-    needs: [construct-tag-name, push-to-repo]
-    uses: ./.github/workflows/deploy.yml
-    with:
-      image-tag: "${{ needs.construct-tag-name.outputs.image_tag }}-back-beta"
-      environment: beta
-
-  deploy-side-beta:
-    name: Deploy Side Beta
-    needs: [construct-tag-name, push-to-repo]
-    uses: ./.github/workflows/deploy.yml
-    with:
-      image-tag: "${{ needs.construct-tag-name.outputs.image_tag }}-side-beta"
-      environment: beta
-
   deploy-back-dev:
     name: Deploy Back Dev
     if: ${{ env.BRANCH_NAME != "main" }}
@@ -70,22 +50,6 @@ jobs:
     with:
       image-tag: "${{ needs.construct-tag-name.outputs.image_tag }}-side-dev"
       environment: dev
-
-  deploy-back-dev-main:
-    name: Deploy Back Dev main
-    if: ${{ env.BRANCH_NAME == "main" }}
-    needs: [construct-tag-name, push-to-repo]
-    uses: ./.github/workflows/deploy.yml
-    with:
-      image-tag: "${{ needs.construct-tag-name.outputs.image_tag }}-back-dev"
-
-  deploy-side-dev-main:
-    name: Deploy Side Dev main
-    if: ${{ env.BRANCH_NAME == "main" }}
-    needs: [construct-tag-name, push-to-repo]
-    uses: ./.github/workflows/deploy.yml
-    with:
-      image-tag: "${{ needs.construct-tag-name.outputs.image_tag }}-side-dev"
 
   deploy-back-stage:
     name: Deploy Back Stage
@@ -118,19 +82,3 @@ jobs:
     with:
       image-tag: "${{ needs.construct-tag-name.outputs.image_tag }}-side-qa"
       environment: qa
-
-  deploy-back-prod:
-    name: Deploy Back Prod
-    needs: [construct-tag-name, push-to-repo]
-    uses: ./.github/workflows/deploy.yml
-    with:
-      image-tag: "${{ needs.construct-tag-name.outputs.image_tag }}-back-prod"
-      environment: prod
-
-  deploy-side-prod:
-    name: Deploy Side Prod
-    needs: [construct-tag-name, push-to-repo]
-    uses: ./.github/workflows/deploy.yml
-    with:
-      image-tag: "${{ needs.construct-tag-name.outputs.image_tag }}-side-prod"
-      environment: prod

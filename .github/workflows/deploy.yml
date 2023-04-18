@@ -1,30 +1,100 @@
 name: Deploy
 
 on:
-  workflow_call:
-    inputs:
-      environment:
-        description: 'Github environment, works for Manual approvals.'
-        required: false
-        type: string
-        default: 'default'
-      image-tag:
-        required: true
-        description: 'Image tag'
-        type: string
-      runs-on:
-        required: false
-        type: string
-        default: "['ubuntu-latest']"
+  push:
+    branches:
+      - main
+      - /^release_.*/
 
+env:
 
+  TAG_OFFSET: 11779
+  BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
 
 jobs:
-  deploy:
-    name: Deploy
-    runs-on: ${{ fromJSON(inputs.runs-on) }}
-    environment: ${{ inputs.environment }}
+  
+  construct-tag-name:
+    name: Construct name
+    runs-on: ubuntu-latest
+
     steps:
-      - name: Deploy
+      - name: Name
+        id: name
         run: |
-          echo 'Deployed ${{ inputs.image-tag }} in ${{ inputs.environment }}'
+          tag_number=$((${{ env.TAG_OFFSET }} + ${{ github.run_number }}))
+          echo "image_tag=${{ env.BRANCH_NAME }}-${tag_number}" >> $GITHUB_OUTPUT
+            
+    outputs:
+      image_tag: ${{ steps.name.outputs.image_tag }}
+
+
+  push-to-repo:
+    name: Push to repo
+    needs: construct-tag-name
+    uses: ./.github/workflows/push-to-repo.yml
+    with:
+      image-tag: ${{ needs.construct-tag-name.outputs.image_tag }}
+
+  deploy-back-beta:
+    name: Deploy Back Beta
+    needs: [construct-tag-name, push-to-repo]
+    uses: ./.github/workflows/deploy.yml
+    with:
+      image-tag: "${{ needs.construct-tag-name.outputs.image_tag }}-back-beta"
+      environment: beta
+
+  deploy-side-beta:
+    name: Deploy Side Beta
+    needs: [construct-tag-name, push-to-repo]
+    uses: ./.github/workflows/deploy.yml
+    with:
+      image-tag: "${{ needs.construct-tag-name.outputs.image_tag }}-side-beta"
+      environment: beta
+
+  deploy-back-stage:
+    name: Deploy Back Stage
+    needs: [construct-tag-name, push-to-repo]
+    uses: ./.github/workflows/deploy.yml
+    with:
+      image-tag: "${{ needs.construct-tag-name.outputs.image_tag }}-back-stage"
+      environment: stage
+
+  deploy-side-stage:
+    name: Deploy Side Stage
+    needs: [construct-tag-name, push-to-repo]
+    uses: ./.github/workflows/deploy.yml
+    with:
+      image-tag: "${{ needs.construct-tag-name.outputs.image_tag }}-side-stage"
+      environment: stage
+
+  deploy-back-qa:
+    name: Deploy Back QA
+    needs: [construct-tag-name, push-to-repo]
+    uses: ./.github/workflows/deploy.yml
+    with:
+      image-tag: "${{ needs.construct-tag-name.outputs.image_tag }}-back-qa"
+      environment: qa
+
+  deploy-side-qa:
+    name: Deploy Side QA
+    needs: [construct-tag-name, push-to-repo]
+    uses: ./.github/workflows/deploy.yml
+    with:
+      image-tag: "${{ needs.construct-tag-name.outputs.image_tag }}-side-qa"
+      environment: qa
+
+  deploy-back-prod:
+    name: Deploy Back Prod
+    needs: [construct-tag-name, push-to-repo]
+    uses: ./.github/workflows/deploy.yml
+    with:
+      image-tag: "${{ needs.construct-tag-name.outputs.image_tag }}-back-prod"
+      environment: prod
+
+  deploy-side-prod:
+    name: Deploy Side Prod
+    needs: [construct-tag-name, push-to-repo]
+    uses: ./.github/workflows/deploy.yml
+    with:
+      image-tag: "${{ needs.construct-tag-name.outputs.image_tag }}-side-prod"
+      environment: prod
