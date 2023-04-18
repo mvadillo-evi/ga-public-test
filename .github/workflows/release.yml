@@ -43,11 +43,11 @@ jobs:
       - name: Dev Environment
         id: env_name
         run: |
-          if [[ ${{ env.BRANCH_NAME }} == "main" ]] 
+          if [[ "${{ env.BRANCH_NAME }}" == "main" ]] 
           then
-            dev_env="dev"
-          else
             dev_env=""
+          else
+            dev_env="dev"
           fi
           echo "dev_env=${dev_env}" >> $GITHUB_OUTPUT
 
