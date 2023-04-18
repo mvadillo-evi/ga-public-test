@@ -55,7 +55,7 @@ jobs:
 
   deploy-back-dev:
     name: Deploy Back Dev
-    if: ${{ ! contains(${{ env.BRANCH_NAME }}, "main") }}
+    if: ${{ env.BRANCH_NAME != "main" }}
     needs: [construct-tag-name, push-to-repo]
     uses: ./.github/workflows/deploy.yml
     with:
@@ -64,7 +64,7 @@ jobs:
 
   deploy-side-dev:
     name: Deploy Side Dev
-    if: ${{ ! contains(${{ env.BRANCH_NAME }}, "main") }}
+    if: ${{ env.BRANCH_NAME != "main" }}
     needs: [construct-tag-name, push-to-repo]
     uses: ./.github/workflows/deploy.yml
     with:
@@ -73,7 +73,7 @@ jobs:
 
   deploy-back-dev-main:
     name: Deploy Back Dev main
-    if: ${{ contains(${{env.BRANCH_NAME }}, "main") }}
+    if: ${{ env.BRANCH_NAME == "main" }}
     needs: [construct-tag-name, push-to-repo]
     uses: ./.github/workflows/deploy.yml
     with:
@@ -81,7 +81,7 @@ jobs:
 
   deploy-side-dev-main:
     name: Deploy Side Dev main
-    if: ${{ contains(${{ env.BRANCH_NAME }}, "main") }}
+    if: ${{ env.BRANCH_NAME == "main" }}
     needs: [construct-tag-name, push-to-repo]
     uses: ./.github/workflows/deploy.yml
     with:
