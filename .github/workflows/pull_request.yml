@@ -33,23 +33,40 @@ jobs:
     with:
       image-tag: ${{ needs.construct-tag-name.outputs.image_tag }}
 
+  construct-dev-environment:
+    name: Construct dev environment
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Dev Environment
+        id: env_name
+        run: |
+          if [[ "${{ env.BRANCH_NAME }}" == "main" ]] 
+          then
+            dev_env=""
+          else
+            dev_env="dev"
+          fi
+          echo "dev_env=${dev_env}" >> $GITHUB_OUTPUT
+
+    outputs:
+      dev_env: ${{ steps.env_name.outputs.dev_env }}
+
   deploy-back-dev:
     name: Deploy Back Dev
-    if: ${{ env.BRANCH_NAME != "main" }}
-    needs: [construct-tag-name, push-to-repo]
+    needs: [construct-tag-name, push-to-repo, construct-dev-environment]
     uses: ./.github/workflows/deploy.yml
     with:
       image-tag: "${{ needs.construct-tag-name.outputs.image_tag }}-back-dev"
-      environment: dev
+      environment: "${{ needs.construct-dev-environment.outputs.dev_env }}"
 
   deploy-side-dev:
     name: Deploy Side Dev
-    if: ${{ env.BRANCH_NAME != "main" }}
-    needs: [construct-tag-name, push-to-repo]
+    needs: [construct-tag-name, push-to-repo, construct-dev-environment]
     uses: ./.github/workflows/deploy.yml
     with:
       image-tag: "${{ needs.construct-tag-name.outputs.image_tag }}-side-dev"
-      environment: dev
+      environment: "${{ needs.construct-dev-environment.outputs.dev_env }}"
 
   deploy-back-stage:
     name: Deploy Back Stage
