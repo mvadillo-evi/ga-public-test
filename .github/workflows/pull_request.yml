@@ -54,7 +54,7 @@ jobs:
 
   deploy-back-dev:
     name: Deploy Back Dev
-    needs: [construct-tag-name, push-to-repo]
+    needs: [construct-tag-name, push-to-repo, construct-dev-environment]
     uses: ./.github/workflows/deploy.yml
     with:
       image-tag: "${{ needs.construct-tag-name.outputs.image_tag }}-back-dev"
@@ -62,7 +62,7 @@ jobs:
 
   deploy-side-dev:
     name: Deploy Side Dev
-    needs: [construct-tag-name, push-to-repo]
+    needs: [construct-tag-name, push-to-repo, construct-dev-environment]
     uses: ./.github/workflows/deploy.yml
     with:
       image-tag: "${{ needs.construct-tag-name.outputs.image_tag }}-side-dev"
