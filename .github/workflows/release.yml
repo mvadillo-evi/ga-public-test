@@ -37,6 +37,7 @@ jobs:
 
   construct-dev-environment:
     name: Construct dev environment
+    needs: [construct-tag-name, push-to-repo]
     runs-on: ubuntu-latest
 
     steps:
