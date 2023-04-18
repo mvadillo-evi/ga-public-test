@@ -86,7 +86,6 @@ jobs:
 
   deploy-back-beta:
     name: Deploy Back Beta
-    if: ${{ env.BRANCH_NAME != "main" }}
     needs: [construct-tag-name, push-to-repo]
     uses: ./.github/workflows/deploy.yml
     with:
