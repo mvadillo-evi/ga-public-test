@@ -1,4 +1,4 @@
-name: Release None Prods
+name: Release None Prod
 
 on:
   pull_request:
