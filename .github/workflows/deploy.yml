@@ -5,9 +5,8 @@ on:
     inputs:
       environment:
         description: 'Github environment, works for Manual approvals.'
-        required: false
+        required: true
         type: string
-        default: 'default'
       image-tag:
         required: true
         description: 'Image tag'
