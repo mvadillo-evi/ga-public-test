@@ -1,9 +1,9 @@
-name: Env Tests
+name: Release Main 
 
 on:
   push:
     branches:
-      - /^release_.*/
+      - main
 
 env:
 
@@ -28,19 +28,15 @@ jobs:
 
 
   deploy-back-dev:
-    name: Deploy Back Dev
-    if: ${{ env.BRANCH_NAME != "main" }}
+    name: Deploy Back Dev main
     needs: [construct-tag-name, push-to-repo]
     uses: ./.github/workflows/deploy.yml
     with:
       image-tag: "${{ needs.construct-tag-name.outputs.image_tag }}-back-dev"
-      environment: dev
 
   deploy-side-dev:
-    name: Deploy Side Dev
-    if: ${{ env.BRANCH_NAME != "main" }}
+    name: Deploy Side Dev main
     needs: [construct-tag-name, push-to-repo]
     uses: ./.github/workflows/deploy.yml
     with:
       image-tag: "${{ needs.construct-tag-name.outputs.image_tag }}-side-dev"
-      environment: dev

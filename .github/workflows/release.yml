@@ -1,8 +1,10 @@
-name: Release None Prod
+name: Release
 
 on:
-  pull_request:
-
+  push:
+    branches:
+      - main
+      - /^release_.*/
 
 env:
 
@@ -33,23 +35,21 @@ jobs:
     with:
       image-tag: ${{ needs.construct-tag-name.outputs.image_tag }}
 
-  deploy-back-dev:
-    name: Deploy Back Dev
-    if: ${{ env.BRANCH_NAME != "main" }}
+  deploy-back-beta:
+    name: Deploy Back Beta
     needs: [construct-tag-name, push-to-repo]
     uses: ./.github/workflows/deploy.yml
     with:
-      image-tag: "${{ needs.construct-tag-name.outputs.image_tag }}-back-dev"
-      environment: dev
+      image-tag: "${{ needs.construct-tag-name.outputs.image_tag }}-back-beta"
+      environment: beta
 
-  deploy-side-dev:
-    name: Deploy Side Dev
-    if: ${{ env.BRANCH_NAME != "main" }}
+  deploy-side-beta:
+    name: Deploy Side Beta
     needs: [construct-tag-name, push-to-repo]
     uses: ./.github/workflows/deploy.yml
     with:
-      image-tag: "${{ needs.construct-tag-name.outputs.image_tag }}-side-dev"
-      environment: dev
+      image-tag: "${{ needs.construct-tag-name.outputs.image_tag }}-side-beta"
+      environment: beta
 
   deploy-back-stage:
     name: Deploy Back Stage
@@ -82,3 +82,19 @@ jobs:
     with:
       image-tag: "${{ needs.construct-tag-name.outputs.image_tag }}-side-qa"
       environment: qa
+
+  deploy-back-prod:
+    name: Deploy Back Prod
+    needs: [construct-tag-name, push-to-repo]
+    uses: ./.github/workflows/deploy.yml
+    with:
+      image-tag: "${{ needs.construct-tag-name.outputs.image_tag }}-back-prod"
+      environment: prod
+
+  deploy-side-prod:
+    name: Deploy Side Prod
+    needs: [construct-tag-name, push-to-repo]
+    uses: ./.github/workflows/deploy.yml
+    with:
+      image-tag: "${{ needs.construct-tag-name.outputs.image_tag }}-side-prod"
+      environment: prod
