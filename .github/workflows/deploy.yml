@@ -7,7 +7,7 @@ on:
         description: 'Github environment, works for Manual approvals.'
         required: false
         type: string
-        default: ""
+        default: 'default'
       image-tag:
         required: true
         description: 'Image tag'
