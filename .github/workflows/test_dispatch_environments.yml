@@ -1,0 +1,28 @@
+name: "Restore Objects"
+
+on:
+  workflow_dispatch:
+    inputs:
+      any-input:
+        description: 'Any input'
+        required: false
+        type: string
+        default: 'Example value'
+
+jobs:
+
+  
+  push-to-repo:
+    name: Push to repo
+    uses: ./.github/workflows/push-to-repo.yml
+    with:
+      image-tag: ${{ inputs.any-input }}
+
+  deploy-back-dev:
+    name: Deploy Back Dev
+    needs: push-to-repo
+    uses: ./.github/workflows/deploy.yml
+    with:
+      image-tag: "${{ inputs.any-input }}-back-dev"
+      environment: dev
+
