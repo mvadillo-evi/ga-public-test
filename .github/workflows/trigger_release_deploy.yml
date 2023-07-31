@@ -1,0 +1,15 @@
+name: Initiate the Pipeline for a Release deploy
+
+on:
+  push:
+    branches:
+      - release_*
+
+jobs:
+  
+  
+  trigger-pipeline-release-deploy:
+    name: Initiate the Pipeline for a Release deploy
+    uses: ./.github/workflows/build_and_deploy.yml
+    with:
+      release-type: release
