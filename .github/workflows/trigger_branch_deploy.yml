@@ -16,3 +16,6 @@ jobs:
   trigger-pipeline-branch-deploy:
     name: Initiate the Pipeline for a Branch deploy
     uses: ./.github/workflows/build_and_deploy.yml
+    with:
+      auto-approve: "stage"
+      release-type: branch

@@ -7,12 +7,12 @@ on:
         description: 'The release type, "branch" if its a PR or "release" if its main or a release branch'
         required: false
         type: string
-        default: branch
-      dev-env:
-        description: 'The environment used for the dev deployment, for auto-approved deployments please use an empty string ""'
+        default: main
+      auto-approve:
+        description: 'The environment used for initiate the workflow and constructing the image, for auto-approved deployments leave the default value ""'
         required: false
         type: string
-        default: dev
+        default: ""
 env:
 
   # This value is summed to the workflow run_number to calculate the
@@ -26,6 +26,7 @@ jobs:
   env-var:
     name: Setup environment variables
     runs-on: ubuntu-latest
+    environment: inputs.auto-approve
 
     steps:
       - name: Checkout
@@ -67,7 +68,7 @@ jobs:
     uses: ./.github/workflows/deploy.yml
     with:
       image-tag: "${{ needs.env-var.outputs.IMAGE_TAG }}-dev-pre-release"
-      environment: beta
+      environment: beta-task
 
   beta-rollback:
     if: inputs.release-type != 'main'
@@ -76,7 +77,7 @@ jobs:
     uses: ./.github/workflows/deploy.yml
     with:
       image-tag: "${{ needs.env-var.outputs.IMAGE_TAG }}-dev-rollback"
-      environment: beta
+      environment: beta-task
 
   beta-deploy:
     if: inputs.release-type != 'main'
@@ -94,7 +95,7 @@ jobs:
     uses: ./.github/workflows/deploy.yml
     with:
       image-tag: "${{ needs.env-var.outputs.IMAGE_TAG }}-stage-pre-release"
-      environment: stage
+      environment: stage-task
 
   stage-rollback:
     if: inputs.release-type == 'main' || inputs.release-type == 'branch' 
@@ -103,7 +104,7 @@ jobs:
     uses: ./.github/workflows/deploy.yml
     with:
       image-tag: "${{ needs.env-var.outputs.IMAGE_TAG }}-stage-rollback"
-      environment: stage
+      environment: stage-task
 
   stage-deploy:
     if: inputs.release-type == 'main' || inputs.release-type == 'branch' 
@@ -121,7 +122,7 @@ jobs:
     uses: ./.github/workflows/deploy.yml
     with:
       image-tag: "${{ needs.env-var.outputs.IMAGE_TAG }}-prod-pre-release"
-      environment: prod
+      environment: prod-task
 
   prod-rollback:
     if: inputs.release-type == 'main'
@@ -130,7 +131,7 @@ jobs:
     uses: ./.github/workflows/deploy.yml
     with:
       image-tag: "${{ needs.env-var.outputs.IMAGE_TAG }}-prod-pre-rollback"
-      environment: prod
+      environment: prod-task
 
   prod-deploy:
     if: inputs.release-type == 'main'

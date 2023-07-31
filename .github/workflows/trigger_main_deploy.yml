@@ -10,6 +10,3 @@ jobs:
   trigger-pipeline-main-deploy:
     name: Initiate the Pipeline for the Main deploy
     uses: ./.github/workflows/build_and_deploy.yml
-    with:
-      release-type: release
-      dev-env: ""
