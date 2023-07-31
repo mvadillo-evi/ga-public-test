@@ -1,0 +1,21 @@
+name: Initiate the Pipeline for a Branch deploy
+
+on:
+  # This approximation will execute a pipeline every time we push to the origin
+  # and the branch is in the filter, even if we haven't created the PR, but if
+  # we add the on/pull_request/branches it will reference to the target branch,
+  # not the source target. Currently, GitHub Actions can't use an AND logic for
+  # filters, only an OR logic, so we can't add both filters to create a trimmed
+  # filter.
+  push:
+    branches:
+      - PHO-1236/test-pipelines-for-l
+
+jobs:
+  
+  trigger-pipeline-branch-deploy:
+    name: Initiate the Pipeline for a Branch deploy
+    uses: ./.github/workflows/build_and_deploy.yml
+    with:
+      auto-approve: "stage"
+      release-type: branch
