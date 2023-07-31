@@ -66,7 +66,16 @@ jobs:
     needs: [env-var, docker-build-and-push-ecr]
     uses: ./.github/workflows/deploy.yml
     with:
-      image-tag: "${{ needs.env-var.outputs.IMAGE_TAG }}-dev-pre-release-WAIT-rollback"
+      image-tag: "${{ needs.env-var.outputs.IMAGE_TAG }}-dev-pre-release"
+      environment: beta
+
+  beta-rollback:
+    if: inputs.release-type != 'main'
+    name: Beta environment Rollback
+    needs: [beta-pre-release]
+    uses: ./.github/workflows/deploy.yml
+    with:
+      image-tag: "${{ needs.env-var.outputs.IMAGE_TAG }}-dev-rollback"
       environment: beta
 
   beta-deploy:
@@ -84,7 +93,16 @@ jobs:
     needs: [env-var, docker-build-and-push-ecr]
     uses: ./.github/workflows/deploy.yml
     with:
-      image-tag: "${{ needs.env-var.outputs.IMAGE_TAG }}-stage-pre-release-WAIT-rollback"
+      image-tag: "${{ needs.env-var.outputs.IMAGE_TAG }}-stage-pre-release"
+      environment: stage
+
+  stage-rollback:
+    if: inputs.release-type == 'main' || inputs.release-type == 'branch' 
+    name: Stage environment Rollback
+    needs: [stage-pre-release]
+    uses: ./.github/workflows/deploy.yml
+    with:
+      image-tag: "${{ needs.env-var.outputs.IMAGE_TAG }}-stage-rollback"
       environment: stage
 
   stage-deploy:
@@ -102,7 +120,16 @@ jobs:
     needs: [env-var, docker-build-and-push-ecr]
     uses: ./.github/workflows/deploy.yml
     with:
-      image-tag: "${{ needs.env-var.outputs.IMAGE_TAG }}-prod-pre-release-WAIT-rollback"
+      image-tag: "${{ needs.env-var.outputs.IMAGE_TAG }}-prod-pre-release"
+      environment: prod
+
+  prod-rollback:
+    if: inputs.release-type == 'main'
+    name: Prod environment Rollback
+    needs: [prod-pre-release]
+    uses: ./.github/workflows/deploy.yml
+    with:
+      image-tag: "${{ needs.env-var.outputs.IMAGE_TAG }}-prod-pre-rollback"
       environment: prod
 
   prod-deploy:
