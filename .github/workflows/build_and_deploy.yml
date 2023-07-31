@@ -26,7 +26,7 @@ jobs:
   env-var:
     name: Setup environment variables
     runs-on: ubuntu-latest
-    environment: inputs.auto-approve
+    environment: ${{ inputs.auto-approve }}
 
     steps:
       - name: Checkout
